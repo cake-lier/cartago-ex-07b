@@ -1,2 +1,2 @@
-rootProject.name = "jacamo-template"
+rootProject.name = "jacamo-ex-07b"
 
