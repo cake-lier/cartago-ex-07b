@@ -1,6 +1,8 @@
 package io.github.cakelier;
 
-import cartago.*;
+import cartago.Artifact;
+import cartago.OPERATION;
+import cartago.OpFeedbackParam;
 
 import java.io.IOException;
 import java.util.List;
@@ -8,15 +10,22 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Shell extends Artifact {
+public class ShellSolution extends Artifact {
     @OPERATION
     public void whoami(final OpFeedbackParam<String> username) {
-        /* Add your code here for launching the "whoami" command and collecting its output. */
+        new Process(List.of("whoami"), l -> username.set(l.collect(Collectors.joining())));
     }
 
     @OPERATION
     public void traceroute(final String host) {
-        /* Add your code here for launching the "traceroute" command and collecting its output. */
+        new Process(
+            List.of("traceroute", host),
+            l -> l.skip(1)
+                  .forEach(s -> TracerouteParser.parse(s).ifPresentOrElse(
+                      h -> signal("hop", h.hopCount(), h.firstProbe(), h.secondProbe(), h.thirdProbe()),
+                      () -> failed("Missing a hop in traceroute, skipping it...")
+                  ))
+        );
     }
 
     /** Helper class to be used for running a process on the current machine. */
@@ -32,7 +41,7 @@ public class Shell extends Artifact {
             try (final var reader = new ProcessBuilder().command(command).start().inputReader()) {
                 andThen.accept(reader.lines());
             } catch (final IOException e) {
-                Shell.this.failed(e.getMessage());
+                ShellSolution.this.failed(e.getMessage());
             }
         }
     }
