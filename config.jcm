@@ -1,5 +1,5 @@
-mas hello_world {
-    agent hello_world_agent
+mas exercise_07b {
+    agent shell_user_agent
 
     asl-path: "src/main/jason"
     java-path: "src/main/cartago"
