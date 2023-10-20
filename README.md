@@ -1,4 +1,4 @@
-# JaCaMo by exercises — Exercise 07b — Doing I/O with the Operating System - Shell artifact
+# CArtAgO by exercises — Exercise 07b — Doing I/O with the Operating System - Shell artifact
 
 In this exercise,
 you'll implement an artifact that makes it possible for agents to execute shell commands and get their results.
